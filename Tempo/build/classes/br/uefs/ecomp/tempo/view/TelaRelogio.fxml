@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TitledPane fx:id="telaRelogio" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" text="Relógio" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.uefs.ecomp.tempo.view.controller.TelaRelogioController">
+  <content>
+    <AnchorPane fx:id="paneRelogio" minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="300.0">
+         <children>
+            <TextField fx:id="fieldHora" alignment="CENTER" focusTraversable="false" layoutX="59.0" layoutY="40.0" prefHeight="51.0" prefWidth="54.0">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="fieldMinuto" alignment="CENTER" focusTraversable="false" layoutX="122.0" layoutY="40.0" prefHeight="51.0" prefWidth="54.0">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="fieldSegundo" alignment="CENTER" focusTraversable="false" layoutX="184.0" layoutY="40.0" prefHeight="51.0" prefWidth="54.0">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </TextField>
+            <Text fx:id="doisPontos1" layoutX="114.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Text>
+            <Text fx:id="doisPontos2" layoutX="176.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Text>
+            <Text fx:id="textMin" fontSmoothingType="LCD" layoutX="139.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="min" textAlignment="CENTER">
+               <font>
+                  <Font name="System Italic" size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="textH" fontSmoothingType="LCD" layoutX="85.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="h" textAlignment="CENTER">
+               <font>
+                  <Font name="System Italic" size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="textS" fontSmoothingType="LCD" layoutX="209.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s" textAlignment="CENTER">
+               <font>
+                  <Font name="System Italic" size="10.0" />
+               </font>
+            </Text>
+            <TextField fx:id="fieldDrift" alignment="CENTER" focusTraversable="false" layoutX="89.0" layoutY="198.0" prefHeight="25.0" prefWidth="65.0" />
+            <Text fx:id="doisPontos3" layoutX="120.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+            </Text>
+            <Text fx:id="doisPontos4" layoutX="155.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+            </Text>
+            <Text fx:id="textTempo" layoutX="47.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tempo">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Text>
+            <Text fx:id="textDrift" layoutX="48.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Drift">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Text>
+            <TextField fx:id="fieldAlteraHora" alignment="CENTER" focusTraversable="false" layoutX="89.0" layoutY="164.0" prefHeight="25.0" prefWidth="30.0" />
+            <TextField fx:id="fieldAlteraMinuto" alignment="CENTER" focusTraversable="false" layoutX="124.0" layoutY="164.0" prefHeight="25.0" prefWidth="30.0" />
+            <TextField fx:id="fieldAlteraSegundo" alignment="CENTER" focusTraversable="false" layoutX="159.0" layoutY="163.0" prefHeight="25.0" prefWidth="30.0" />
+            <Button fx:id="buttonAlterarTempo" focusTraversable="false" layoutX="202.0" layoutY="163.0" mnemonicParsing="false" onAction="#clicaAlterarTempo" text="Alterar">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Button>
+            <Button fx:id="buttonAlterarDrift" focusTraversable="false" layoutX="202.0" layoutY="198.0" mnemonicParsing="false" onAction="#clicaAlterarDrift" text="Alterar">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Button>
+            <Separator fx:id="separador" layoutX="-2.0" layoutY="130.0" prefHeight="3.0" prefWidth="300.0" />
+            <Text fx:id="textDrift1" layoutX="156.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ms">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+         </children></AnchorPane>
+  </content>
+</TitledPane>
