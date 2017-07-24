@@ -7,5 +7,6 @@ import java.util.ArrayList;
 public interface InterfaceComunicacao extends Remote {
 
     public ArrayList<String> getVizinhos(String origem) throws RemoteException;
-
+    public String hello() throws RemoteException;//teste comunicacao
+       
 }

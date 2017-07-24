@@ -51,7 +51,11 @@ public class Grafo {
         else {
             ComunicacaoServidor comunicacao = ComunicacaoServidor.getInstance();
             ArrayList<String> vizinhos = comunicacao.getVizinhos(origem);
-            vizinhos.addAll(getVizinhos(origem));
+            ArrayList<String> v = getVizinhos(origem);
+            if (v != null){
+                vizinhos.addAll(v);
+            }
+            
             for (String vizinho : vizinhos) {
                 if (!vizitados.contains(vizinho)){
                     caminhosPossiveis(vizinho, destino);

@@ -33,7 +33,13 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
         caminhos = new Grafo();
         clientes = new HashMap<String, String>();
         try {
-            LocateRegistry.createRegistry(1099);
+            if (ComunicacaoServidor.getNome().equals("A")) {
+                LocateRegistry.createRegistry(1099);
+            } else if (ComunicacaoServidor.getNome().equals("B")) {
+                LocateRegistry.createRegistry(2000);
+            } else if (ComunicacaoServidor.getNome().equals("C")) {
+                LocateRegistry.createRegistry(2001);
+            }
 
             Naming.bind(ComunicacaoServidor.getNome(), this);
 
@@ -42,19 +48,23 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
             System.out.println(e.getMessage());
         }
     }
+    //teste comnicacao
+    @Override
+    public String hello(){
+        return "Hello";
+    }
 
     /**
      * Abri porta do servidor e permite que mais de um cliente a acesse.
      */
     public void executa() throws IOException {
-        if (ComunicacaoServidor.getNome().equals("A")){
+        if (ComunicacaoServidor.getNome().equals("A")) {
             serverSocket = new ServerSocket(12345);
-        } else if(ComunicacaoServidor.getNome().equals("B")){
+        } else if (ComunicacaoServidor.getNome().equals("B")) {
             serverSocket = new ServerSocket(12346);
-        }else if (ComunicacaoServidor.getNome().equals("C")){
+        } else if (ComunicacaoServidor.getNome().equals("C")) {
             serverSocket = new ServerSocket(12347);
         }
-        
 
         while (true) {
             // aceita um cliente
@@ -100,13 +110,14 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
 
     @Override
     public ArrayList<String> getVizinhos(String origem) throws RemoteException {
-        
+
         return caminhos.getVizinhos(origem);
     }
 
     public void caminhosPossiveis(String origem, String destino) throws RemoteException, NotBoundException, MalformedURLException {
         ComunicacaoServidor comunicacao = ComunicacaoServidor.getInstance();
         comunicacao.conectar();
+        comunicacao.hello();//testando comunicacao
         caminhos.caminhosPossiveis(origem, destino);
     }
 
@@ -165,20 +176,20 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
     public void carregarTrechos() throws FileNotFoundException {
         String trecho[] = new String[3];
         // escolhe arquivos com os trechos da empresa
-        JFileChooser arquivo = new JFileChooser();
-        int returnVal = arquivo.showOpenDialog(null);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = arquivo.getSelectedFile();
-            // le o arquivo com trechos
-            Scanner scan = new Scanner(file);
-            while (scan.hasNext()) {
-                String s = scan.nextLine();
-                // formato de s: origem - destino - numero de passagens
-                trecho = s.split("-");
-                //adiciona no grafo
-                caminhos.addCaminho(trecho[0].trim(), trecho[1].trim());
-            }
+
+        File file = new File("trechos_"+ComunicacaoServidor.getNome());
+        // le o arquivo com trechos
+        Scanner scan = new Scanner(file);
+        while (scan.hasNext()) {
+            String s = scan.nextLine();
+            // formato de s: origem - destino - numero de passagens
+            trecho = s.split("-");
+            //adiciona no grafo
+            caminhos.addCaminho(trecho[0].trim(), trecho[1].trim());
+            
         }
+        
+        
 
     }
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="224.0" prefWidth="376.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientedecolagem.TelaInicialController">
+   <children>
+      <Button fx:id="btPesquisar" layoutX="148.0" layoutY="158.0" mnemonicParsing="false" onAction="#caminhosPossiveis" text="Pesquisar" />
+      <TextField fx:id="tfOrigem" layoutX="103.0" layoutY="62.0" />
+      <TextField fx:id="tfDestino" layoutX="103.0" layoutY="120.0" />
+      <Label layoutX="163.0" layoutY="105.0" text="Destino" />
+      <Label layoutX="164.0" layoutY="47.0" text="Origem" />
+   </children>
+</AnchorPane>

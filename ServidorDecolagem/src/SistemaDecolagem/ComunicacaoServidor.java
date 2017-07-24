@@ -53,15 +53,27 @@ public class ComunicacaoServidor {
             c = (InterfaceComunicacao) Naming.lookup("rmi://localhost/B");
             servidores.add(c);
         }
-        
+        System.out.println("interface carregada");
     }
     
     public ArrayList<String> getVizinhos(String origem) throws RemoteException{
         ArrayList<String> vizinhos = new ArrayList<String>();
         for (InterfaceComunicacao servidor: servidores){
-            vizinhos.addAll(servidor.getVizinhos(origem));
+            ArrayList<String> v = servidor.getVizinhos(origem);
+            if (v != null){
+                vizinhos.addAll(v);
+            }              
         }
+        
         return vizinhos;
+    }
+    
+    public void hello() throws RemoteException{
+       
+        for (InterfaceComunicacao servidor: servidores){
+            System.out.println(servidor.hello());
+        }
+        
     }
 }
 

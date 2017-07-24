@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.Scanner;
 
 /**
@@ -49,6 +52,8 @@ public class TrataCliente implements Runnable {
                 entrar();
             } else if (acao.equals("fechar")) {
                 servidor.fechar();
+            }else if (acao.equals("caminhos")){
+                caminhos();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,6 +61,12 @@ public class TrataCliente implements Runnable {
             entrada.close();
             saida.close();
         }
+    }
+    
+    private void caminhos() throws RemoteException, NotBoundException, MalformedURLException{
+        String origem = entrada.nextLine();
+        String destino = entrada.nextLine();
+        servidor.caminhosPossiveis(origem, destino);
     }
    
     /**

@@ -94,9 +94,9 @@ public class TelaLoginController implements Initializable {
 
                     if (resposta.equals("1")) {
                        
-                        System.out.println("Funcionou!!!");
+                        new TelaInicial().start(new Stage());
                         
-                        //TelaLogin.getStage().close();
+                        TelaLogin.getStage().close();
                                   
 
                        
