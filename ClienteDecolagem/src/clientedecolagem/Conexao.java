@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package clientedecolagem;
 
 import java.io.IOException;
 import java.io.PrintStream;
+
 import java.net.Socket;
 import java.net.UnknownHostException;
+
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
@@ -27,7 +24,7 @@ public class Conexao {
     private Socket socket;
     private Scanner entrada;
     private PrintStream saida;
-    private static String ip;// ip do servidor	
+    private static String ip;   //Ip do servidor	
     private static String nome;
 
     /** Método que inicializa a classe.
@@ -52,43 +49,46 @@ public class Conexao {
      * @param ip
      */
     public static void setIp(String ip){
-            Conexao.ip = ip;
+        Conexao.ip = ip;
     }
     
     
-    /** Método que altera o valor do nome da empresa.
+    /** Método que altera o valor do nome do servidor.
      * 
-     * @param ip
+     * @param nome 
      */
     public static void setNome(String nome){
-            Conexao.nome = nome;
+        Conexao.nome = nome;
     }
-    
-    
-
+        
     /** Método que conecta com o servidor.
      * 
      * @return true or false
      */	
     public boolean conecta() {
         
-    	try{
-            if (nome.equals("A")){
-                socket = new Socket(ip, 12345);
-            }else if (nome.equals("B")){
-                socket = new Socket(ip, 12346);
-            }else if (nome.equals("C")){
-                socket = new Socket(ip, 12347);
-            }
-            
+        try{
 
-            entrada = new Scanner(socket.getInputStream());
-            saida = new PrintStream(socket.getOutputStream());
-            return true; // sucesso
-    	} catch (Exception e){
-            JOptionPane.showMessageDialog(null, "Erro ao conectar o servidor", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
-            return false; // deu erro
+            switch (nome) {
+                case "A":
+                    this.socket = new Socket(ip, 12345);
+                    break;
+                case "B":
+                    this.socket = new Socket(ip, 12346);
+                    break;
+                case "C":
+                    this.socket = new Socket(ip, 12347);
+                    break;
+                default:
+                    break;
+            }
+            this.entrada = new Scanner(this.socket.getInputStream());
+            this.saida = new PrintStream(this.socket.getOutputStream());
+            return true;   //Sucesso
+    	} catch (IOException e){
+            JOptionPane.showMessageDialog(null, "Erro ao conectar com o servidor",
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;   //Erro
     	}
     }
    
@@ -97,7 +97,7 @@ public class Conexao {
      * @param s
      */
     public void envia(String s){
-    	saida.println(s);
+    	this.saida.println(s);
     }    
     
     /** Método que recebe uma string do servidor e a retorna.
@@ -105,7 +105,7 @@ public class Conexao {
      * @return String
      */
     public String recebe(){
-    	return entrada.nextLine();
+    	return (this.entrada.nextLine());
     }
     
     /** Método que desconecta do servidor.
@@ -113,9 +113,9 @@ public class Conexao {
      * @throws IOException
      */
     public void desconecta() throws IOException{
-    	saida.close();
-    	entrada.close();
-    	socket.close();
+    	this.saida.close();
+    	this.entrada.close();
+    	this.socket.close();
     }    
     
 }

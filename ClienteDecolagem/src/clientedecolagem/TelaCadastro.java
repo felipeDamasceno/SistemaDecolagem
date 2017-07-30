@@ -1,52 +1,53 @@
 package clientedecolagem;
 
 import javafx.application.Application;
+
 import javafx.fxml.FXMLLoader;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import javafx.stage.Stage;
 
+
 /**
- * Classe que inicializa a interface a tela de cadastro do cliente.
+ * Classe que inicia a interface da tela de cadastro do cliente.
  *
- * @author felipe
- *
+ * @author Camille Jesus e Felipe Damasceno
  */
 public class TelaCadastro extends Application {
 
     private static Stage stage;
 
-    /**
-     *
-     * Cria tela e a mostra.
+    /** Método que carrega a tela de cadastro e a mostra.
+     * 
+     * @param stage
+     * 
+     * @throws java.lang.Exception
      */
     @Override
     public void start(Stage stage) throws Exception {
         TelaCadastro.stage = stage;
-        Parent parent = FXMLLoader.
-                load(getClass().getResource("TelaCadastro.fxml"));
-        Scene scene = new Scene(parent);
-        stage.setScene(scene);
+        Parent parent = FXMLLoader.load(getClass().getResource("TelaCadastro.fxml"));
+        stage.setScene(new Scene(parent));
         stage.setTitle("Sistema Decolagem");
         stage.show();
-
     }
 
-    /**
-     * Retorna o Stage da interface.
+    /** Método que retorna o stage da interface da tela de cadastro.
      *
-     * @return Stage
+     * @return stage
      */
     public static Stage getStage() {
         return stage;
     }
 
-    /**
-     * Inicializa a tela de cadastro.
+    /** Método principal, que inicializa a tela de cadastro.
      *
      * @param args
      */
     public static void main(String[] args) {
         launch(args);
     }
+    
 }

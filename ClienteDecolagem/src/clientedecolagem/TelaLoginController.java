@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package clientedecolagem;
 
 import java.net.URL;
@@ -28,78 +23,57 @@ import javafx.stage.Stage;
 
 
 /**
- * Classe que possui as funcoes dos botoes da interface de login.
+ * Classe que controla a interface da tela de login do cliente.
  *
- * @author felipe
- *
+ * @author Camille Jesus e Felipe Damasceno
  */
 public class TelaLoginController implements Initializable {
 
     @FXML
     private TitledPane telaLogin;
-
     @FXML
     private Button entrar;
-
     @FXML
     private PasswordField fieldSenha;
-
     @FXML
     private AnchorPane pane;
-
     @FXML
     private TextField fieldNickname;
-
     @FXML
     private Hyperlink cadastrese;
-
     @FXML
     private Label labelNickname;
-
     @FXML
     private Label labelSenha;
 
-    /**
-     * Funcao que executa ao inicializar.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle bundle) {
-
-    }
-
-    /**
-     * Ao clicar no botao de login verifica informacoes (identificador e senha)
-     * e se ela estiver no servidor abri a tela principal, caso contrario o
-     * usuario recebe uma mensagem para informar do erro.
+    /** Método que loga cliente no sistema de decolagem, se as informações fornecidas
+     * estiverem corretas, o cliente é cadastrado com sucesso, se não, o cliente
+     * é informado sobre o erro.
      *
      * @param event
-     *
+     * 
+     * @throws Exception
      */
     @FXML
     private void clicaEntrar(ActionEvent event) {
+        
         try {
             String nome = fieldNickname.getText();
             String senha = fieldSenha.getText();
 
             if (verificarCampos(nome, senha)) {
-
                 Conexao cliente = Conexao.getInstancia();
+                
                 if (cliente.conecta()) {
                     cliente.envia("entrar");
                     cliente.envia(nome);
                     cliente.envia(senha);
-
                     String resposta = cliente.recebe();
                     cliente.desconecta();
 
-                    if (resposta.equals("1")) {
-                       
-                        new TelaInicial().start(new Stage());
-                        
+                    if (resposta.equals("1")) {                       
+                        new TelaInicial().start(new Stage());                        
                         TelaLogin.getStage().close();
-                                  
-
-                       
                     } else {
                         JOptionPane.showMessageDialog(null, "Informações inválidas!", "Erro!", JOptionPane.ERROR_MESSAGE);
                     }
@@ -109,41 +83,47 @@ public class TelaLoginController implements Initializable {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Problema no Servidor!", "Erro!", JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
-    /**
-     * Verifica se os campos da interface estao em branco.
+    /** Método que verifica se os campos da interface estão devidamente preenchidos.
      *
      * @param nome
      * @param senha
-     * @return true se campos nao estao em branco e false se esta em branco
+     * 
+     * @return boolean (true or false)
      */
-    private boolean verificarCampos(String identificador, String senha) {
-        if (!identificador.equals("") && !senha.equals("")) {
-
-            return true;//tudo correto
+    private boolean verificarCampos(String nome, String senha) {
+        
+        if (!nome.equals("") && !senha.equals("")) {
+            return true;
         } else {
             JOptionPane.showMessageDialog(null, "Campo(s) vazio(s)!", "Alerta!", JOptionPane.WARNING_MESSAGE);
         }
-        return false;//tem erro
+        return false;
     }
-
     
-    /**
-     * Chama a tela de cadastro e fecha a tela atual.
+    /** Método que retorna à tela de cadastro e fecha a tela atual.
      *
      * @param event
-     *
      */
     @FXML
     private void clicaCadastrar(ActionEvent event) {
+        
         try {
             new TelaCadastro().start(new Stage());
             TelaLogin.getStage().close();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Problema ao mudar de tela!", "Erro!", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    /** Método que prepara a janela.
+     * 
+     * @param url
+     * @param bundle
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle bundle) {
 
     }
 

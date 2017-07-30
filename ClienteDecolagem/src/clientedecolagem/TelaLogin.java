@@ -1,28 +1,35 @@
 package clientedecolagem;
 
 import java.io.IOException;
+
 import java.net.UnknownHostException;
+
 import javafx.application.Application;
+
 import javafx.fxml.FXMLLoader;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import javafx.stage.Stage;
+
 import javax.swing.JOptionPane;
 
 
 /**
- * Classe que inicializa a interface a tela do login. Inicializando com ele a
- * classe Conexao e o ip do servidor.
+ * Classe que inicia a interface da tela de login do cliente.
  *
- * @author felipe
- *
+ * @author Camille Jesus e Felipe Damasceno
  */
 public class TelaLogin extends Application {
 
     private static Stage stage;
 
-    /**
-     * Cria a tela e a mostra.
+    /** Método que carrega a tela de login e a mostra.
+     * 
+     * @param stage
+     * 
+     * @throws java.lang.Exception
      */
     @Override
     public void start(Stage stage) throws Exception {
@@ -35,35 +42,32 @@ public class TelaLogin extends Application {
 
     }
 
-    /**
-     * Retorna o Stage da interface.
+    /** Método que retorna o stage da interface da tela de login.
      *
-     * @return Stage
+     * @return stage
      */
     public static Stage getStage() {
         return stage;
     }
 
-    /**
-     * Função principal que inicializa a classe conexão, recebe ip do servidor e
-     * inicializa a interface de login.
+    /** Método principal, que inicializa a tela de login, inicia a conexão, recebe
+     * o Ip do servidor desejado e seu nome, e estabelece a conexão.
      *
      * @param args
-     * @throws UnknownHostException
-     * @throws IOException
+     * 
+     * @throws java.net.UnknownHostException
+     * @throws java.io.IOException
      */
     public static void main(String[] args) throws UnknownHostException, IOException {
-        Conexao.singleton();
+        Conexao.singleton();        
+        String ip = JOptionPane.showInputDialog("Informe Ip do Servidor");
+        String nome = JOptionPane.showInputDialog("Informe Empresa");
         
-        String ip = JOptionPane.showInputDialog("Digite ip do servidor");
-        String nome = JOptionPane.showInputDialog("Digite nome da empresa");
-        if (!ip.equals("")) {
+        if ((!ip.equals("") && !ip.equals(" ")) && !nome.equals("")  && !nome.equals(" ")) {
             Conexao.setIp(ip);
             Conexao.setNome(nome);
-
             launch(args);
-
         }
-
     }
+    
 }

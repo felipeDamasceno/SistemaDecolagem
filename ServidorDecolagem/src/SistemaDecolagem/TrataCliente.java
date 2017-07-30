@@ -6,17 +6,19 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+
 import java.net.MalformedURLException;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+
 import java.util.Scanner;
 
-/**
- * Classe que trata dos multi-clientes. Ela possue as funcoes para cada acao que
- * o cliente pode tomar no servidor central do jogo.
- *
- * @author felipe e Camille
- *
+
+/** Classe TrataCliente, thread que é criada para tratamento de cada cliente aceito
+ * no servidor.
+ * 
+ * @author Camille Jesus e Felipe Damasceno
  */
 public class TrataCliente implements Runnable {
 
@@ -24,9 +26,8 @@ public class TrataCliente implements Runnable {
     private PrintStream saida;
     private Servidor servidor;
 
-    /**
-     * Inicializados da classe. Recebe o servidor e as entradas e saidas para
-     * comunicacao com cliente
+    /** Construtor da classe que inicializa os atributos com os valores recebidos
+     * de servidor, entrada e saída para comunicação com o "cliente".
      *
      * @param in
      * @param out
@@ -38,90 +39,94 @@ public class TrataCliente implements Runnable {
         this.servidor = servidor;
     }
 
-    /**
-     * Metodo que eh executado quando a classe inicia. Pedi uma acao do cliente
-     * para chamar a funcao apropriada para ela. Depois fecha a conexao com
-     * cliente.
+    /** Método executado para cada cliente aceito, inicia a leitura e escrita de
+     * objetos e apresenta as condições de envio e execução para cada requisição
+     * possível.
      */
     public void run() {
+        
         try {
-            String acao = entrada.nextLine();
-            if (acao.equals("cadastrar")) {
-                cadastrar();
-            } else if (acao.equals("entrar")) {
-                entrar();
-            } else if (acao.equals("fechar")) {
-                servidor.fechar();
-            }else if (acao.equals("caminhos")){
-                caminhos();
+            
+            switch (this.entrada.nextLine()) {
+                case "cadastrar":
+                    this.cadastrar();
+                    break;
+                case "entrar":
+                    this.entrar();
+                    break;
+                case "caminhos":
+                    this.caminhos();
+                    break;
+                case "fechar":
+                    this.servidor.fechar();
+                    break;                
+                default:
+                    break;
             }
-        } catch (Exception e) {
+        } catch (IOException | NotBoundException e) {
             e.printStackTrace();
         } finally {
-            entrada.close();
-            saida.close();
+            this.entrada.close();
+            this.saida.close();
         }
     }
     
-    private void caminhos() throws RemoteException, NotBoundException, MalformedURLException{
-        String origem = entrada.nextLine();
-        String destino = entrada.nextLine();
-        servidor.caminhosPossiveis(origem, destino);
+    /** Método que cadastra um cliente no sistema.
+     *
+     * @throws IOException
+     */
+    private void cadastrar() throws IOException {
+        String nome = this.entrada.nextLine();
+        String senha = this.entrada.nextLine();
+        
+        if (!this.servidor.contemCliente(nome)) {   //Se o cliente não está no servidor
+            this.servidor.addCliente(nome, senha);   //Adiciona
+            this.saida.println("1");   //Confirmação
+            this.salvar();   //Salva as informações do cliente em arquivo
+        } else {
+            this.saida.println("0");   //Não confirmação
+        }
     }
    
-    /**
-     * Salva servidor em arquivo.
+    /** Método que salva o servidor em arquivo.
      *
      * @throws IOException
      */
     private void salvar() throws IOException {
         FileOutputStream arquivoGrav = new FileOutputStream("servidor"+ComunicacaoServidor.getNome()+".ser");
         ObjectOutputStream objGravar = new ObjectOutputStream(arquivoGrav);
-
-        objGravar.writeObject(servidor);
+        objGravar.writeObject(this.servidor);
         objGravar.flush();
         objGravar.close();
-
         arquivoGrav.flush();
         arquivoGrav.close();
-
     }
-
-    /**
-     * Loga em uma conta se informacoes estiver correta
+    
+    /** Método que loga um cliente no sistema.
      */
     private void entrar() {
-        String nome = entrada.nextLine();
-        String senha = entrada.nextLine();
-        String confirmarSenha = servidor.getSenha(nome);
+        String nome = this.entrada.nextLine();
+        String senha = this.entrada.nextLine();
+        String confirmarSenha = this.servidor.getSenha(nome);
 
-        if (confirmarSenha != null) {// existe senha
-            // senha esta correta
-            if (senha.equals(confirmarSenha)) {
-                saida.println("1");// tudo correto
-
+        if (confirmarSenha != null) {   //Se existe senha
+            
+            if (senha.equals(confirmarSenha)) {   //E ela está correta
+                this.saida.println("1");   //Confirmação
+            } else {
+                this.saida.println("0");   //Não confirmação                
             }
-
         }
-        saida.println("0");// teve erro
-
     }
-
-    /**
-     * Cadastra um cliente ao banco
-     *
-     * @throws IOException
+    
+    /** Método que verifica todos os caminhos da origem ao destino especificados.
+     * 
+     * @throws RemoteException
+     * @throws NotBoundException
+     * @throws MalformedURLException 
      */
-    private void cadastrar() throws IOException {
-        String nome = entrada.nextLine();
-        String senha = entrada.nextLine();
-        if (!servidor.contemCliente(nome)) {
-            servidor.addCliente(nome, senha);
-            saida.println("1");// tudo correto
-            salvar();
-        } else {
-            saida.println("0");//nome ja existe
-        }
-
+    private void caminhos() throws RemoteException, NotBoundException, MalformedURLException{
+        this.servidor.caminhosPossiveis(this.entrada.nextLine(), this.entrada.nextLine());
     }
+    
 }

@@ -1,19 +1,23 @@
 package clientedecolagem;
 
 import java.net.URL;
+
 import java.util.ResourceBundle;
+
 import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-import javax.swing.JOptionPane;
+
 
 /**
+ * Classe que controla a interface da tela de início do sistema do cliente.
  *
- * @author felipe
+ * @author Camille Jesus e Felipe Damasceno
  */
 public class TelaInicialController implements Initializable {
 
@@ -29,14 +33,10 @@ public class TelaInicialController implements Initializable {
     @FXML
     private AnchorPane pane;
 
-    /**
-     * Funcao que executa ao inicializar.
+    /** Método que libera o evento para pesquisa de caminhos possíveis a partir da
+     * origem e destino especificados.
+     * 
      */
-    @Override
-    public void initialize(URL url, ResourceBundle bundle) {
-
-    }
-
     @FXML
     private void caminhosPossiveis(ActionEvent event) throws Exception {
         String origem = tfOrigem.getText();
@@ -47,11 +47,17 @@ public class TelaInicialController implements Initializable {
             cliente.envia("caminhos");
             cliente.envia(origem);
             cliente.envia(destino);
-
-            cliente.desconecta();
-
-            
+            cliente.desconecta();           
         }
+    }   
+    
+    /** Método que prepara a janela.
+     * 
+     * @param url
+     * @param bundle
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle bundle) {
 
     }
 
