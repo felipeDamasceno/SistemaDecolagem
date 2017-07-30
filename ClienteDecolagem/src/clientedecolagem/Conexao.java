@@ -51,8 +51,11 @@ public class Conexao {
     public static void setIp(String ip){
         Conexao.ip = ip;
     }
-    
-    
+
+    public static String getNome() {
+        return nome;
+    }
+        
     /** Método que altera o valor do nome do servidor.
      * 
      * @param nome 

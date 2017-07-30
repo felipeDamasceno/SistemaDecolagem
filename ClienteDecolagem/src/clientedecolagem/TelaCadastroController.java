@@ -45,6 +45,7 @@ public class TelaCadastroController implements Initializable {
     private Label labelNickname;
     @FXML
     private Label labelSenha;
+    private static Conexao conexao = Conexao.getInstancia();
 
     /** Método que dispara o evento do botão, voltando à tela de login.
      * 
@@ -72,14 +73,13 @@ public class TelaCadastroController implements Initializable {
         String senha = fieldSenha.getText();
 
         if (verificarCampos(nome, senha)) {
-            Conexao cliente = Conexao.getInstancia();
             
-            if (cliente.conecta()) {
-                cliente.envia("cadastrar");
-                cliente.envia(nome);
-                cliente.envia(senha);
-                String resposta = cliente.recebe();
-                cliente.desconecta();
+            if (conexao.conecta()) {
+                conexao.envia("cadastrar");
+                conexao.envia(nome);
+                conexao.envia(senha);
+                String resposta = conexao.recebe();
+                conexao.desconecta();
 
                 if (resposta.equals("1")) {
                     new TelaLogin().start(new Stage());

@@ -21,6 +21,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -63,14 +64,8 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
         }
     }
     
-    /** Método que retorna a senha de um cliente.
-     *
-     * @param nome
-     * 
-     * @return cliente
-     */
-    public String getSenha(String nome) {
-        return (this.clientes.get(nome));
+    public String getCidades() {
+        return (this.grafo.getCidades());
     }
     
     /** Método que retorna os clientes.
@@ -107,6 +102,16 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
      */
     public boolean contemCliente(String nome) {
         return (this.clientes.containsKey(nome));
+    }
+    
+    /** Método que retorna a senha de um cliente.
+     *
+     * @param nome
+     * 
+     * @return cliente
+     */
+    public String getSenha(String nome) {
+        return (this.clientes.get(nome));
     }
     
     /** Método remoto que retorna uma lista de cidades vizinhas de uma dada origem.

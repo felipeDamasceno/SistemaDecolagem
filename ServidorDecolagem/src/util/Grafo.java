@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 
@@ -31,6 +32,10 @@ public class Grafo {
         this.caminhoAtual = new Stack<>();
         this.visitadas = new TreeSet<>();
         this.todosCaminhos = new ArrayList<>();
+    }
+    
+    public String getCidades() {
+        return (this.grafo.keySet().toString());
     }
     
     /** Método que retorna uma lista de cidades vizinhas de uma dada origem.

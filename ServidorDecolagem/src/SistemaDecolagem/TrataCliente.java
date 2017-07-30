@@ -54,6 +54,9 @@ public class TrataCliente implements Runnable {
                 case "entrar":
                     this.entrar();
                     break;
+                case "cidades":
+                    this.saida.println(this.servidor.getCidades());
+                    break;
                 case "caminhos":
                     this.caminhos();
                     break;
@@ -126,7 +129,9 @@ public class TrataCliente implements Runnable {
      * @throws MalformedURLException 
      */
     private void caminhos() throws RemoteException, NotBoundException, MalformedURLException{
-        this.servidor.caminhosPossiveis(this.entrada.nextLine(), this.entrada.nextLine());
+        String origem = this.entrada.nextLine();
+        String destino = this.entrada.nextLine();        
+        this.servidor.caminhosPossiveis(origem, destino);
     }
     
 }
