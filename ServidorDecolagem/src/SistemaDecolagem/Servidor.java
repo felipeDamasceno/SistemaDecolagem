@@ -64,10 +64,6 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
         }
     }
     
-    public String getCidades() {
-        return (this.grafo.getCidades());
-    }
-    
     /** Método que retorna os clientes.
      *
      * @return clientes
@@ -163,6 +159,10 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
         System.exit(0);
     }
 
+    public void limpaCaminhos() {
+        this.grafo.limpaTodosCaminhos();
+    }
+    
     /** Método que verifica todos os caminhos da origem ao destino especificados.
      * 
      * @param origem
@@ -172,11 +172,12 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
      * @throws NotBoundException
      * @throws MalformedURLException 
      */
-    public void caminhosPossiveis(String origem, String destino) throws RemoteException, NotBoundException, MalformedURLException {
+    public String caminhosPossiveis(String origem, String destino) throws RemoteException, NotBoundException, MalformedURLException {
         ComunicacaoServidor comunicacao = ComunicacaoServidor.getInstance();
         comunicacao.conectar();
         comunicacao.hello();   //Teste de comunicação
         this.grafo.caminhosPossiveis(origem, destino);
+        return (this.grafo.getTodosCaminhos().toString());
     }
 
     /** Método que carrega os dados dos clientes para o sistema.

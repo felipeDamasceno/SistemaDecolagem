@@ -10,12 +10,13 @@
       <AnchorPane prefHeight="400.0" prefWidth="500.0">
          <children>
             <Text fx:id="textNome" layoutX="22.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-            <ComboBox fx:id="comboOrigem" layoutX="27.0" layoutY="103.0" onAction="#getCidades" prefHeight="25.0" prefWidth="117.0" />
             <Text fx:id="textOrigem" layoutX="28.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Origem:" />
             <Text fx:id="textDestino" layoutX="28.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Destino:" />
-            <ComboBox fx:id="comboDestino" layoutX="27.0" layoutY="188.0" prefHeight="25.0" prefWidth="117.0" />
             <Button fx:id="buttonOk" layoutX="112.0" layoutY="248.0" mnemonicParsing="false" onAction="#clicaOk" text="Ok" />
-            <ListView fx:id="listRotas" layoutX="235.0" layoutY="54.0" prefHeight="292.0" prefWidth="232.0" />
+            <ListView fx:id="listRotas" layoutX="235.0" layoutY="54.0" prefHeight="258.0" prefWidth="232.0" />
+            <TextField fx:id="fieldOrigem" layoutX="28.0" layoutY="103.0" prefHeight="25.0" prefWidth="116.0" />
+            <TextField fx:id="fieldDestino" layoutX="28.0" layoutY="188.0" prefHeight="25.0" prefWidth="116.0" />
+            <Button fx:id="buttonComprar" layoutX="320.0" layoutY="321.0" mnemonicParsing="false" text="Comprar" />
          </children>
       </AnchorPane>
    </content>

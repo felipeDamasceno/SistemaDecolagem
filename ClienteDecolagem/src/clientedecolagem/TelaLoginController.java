@@ -45,6 +45,7 @@ public class TelaLoginController implements Initializable {
     private Label labelNickname;
     @FXML
     private Label labelSenha;
+    private static Conexao conexao = Conexao.getInstancia();
 
     /** Método que loga cliente no sistema de decolagem, se as informações fornecidas
      * estiverem corretas, o cliente é cadastrado com sucesso, se não, o cliente
@@ -62,14 +63,13 @@ public class TelaLoginController implements Initializable {
             String senha = fieldSenha.getText();
 
             if (verificarCampos(nome, senha)) {
-                Conexao cliente = Conexao.getInstancia();
                 
-                if (cliente.conecta()) {
-                    cliente.envia("entrar");
-                    cliente.envia(nome);
-                    cliente.envia(senha);
-                    String resposta = cliente.recebe();
-                    cliente.desconecta();
+                if (conexao.conecta()) {
+                    conexao.envia("entrar");
+                    conexao.envia(nome);
+                    conexao.envia(senha);
+                    String resposta = conexao.recebe();
+                    conexao.desconecta();
 
                     if (resposta.equals("1")) {                       
                         new TelaInicial().start(new Stage());                        

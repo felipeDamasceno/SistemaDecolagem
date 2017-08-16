@@ -33,9 +33,15 @@ public class Grafo {
         this.visitadas = new TreeSet<>();
         this.todosCaminhos = new ArrayList<>();
     }
+
+    public ArrayList<ArrayList<String>> getTodosCaminhos() {
+        System.out.println("todos os caminhos grafo");
+        System.out.println(todosCaminhos + "no grafo");
+        return this.todosCaminhos;
+    }
     
-    public String getCidades() {
-        return (this.grafo.keySet().toString());
+    public void limpaTodosCaminhos() {
+        this.todosCaminhos.clear();
     }
     
     /** Método que retorna uma lista de cidades vizinhas de uma dada origem.
@@ -80,6 +86,7 @@ public class Grafo {
             for (String cidade : this.caminhoAtual) {
                 rota.add(cidade);
             }
+            rota.add("@");
             this.todosCaminhos.add(rota);
             
             /*
