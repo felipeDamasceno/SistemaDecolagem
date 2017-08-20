@@ -43,14 +43,7 @@ public class Grafo {
     public Set<String> getTodasCidades() throws RemoteException {
         System.out.println("todos as cidades grafo");
         System.out.println(this.grafo.keySet() + "no grafo");
-        Set<String> cidades = this.grafo.keySet();
-        Set<String> outrasCidades = comunicacao.getCidades();
-        System.out.println(outrasCidades + "outros grafos");
-        
-        if (cidades != null) {
-            outrasCidades.addAll(cidades);   //Cria lista geral de vizinhos
-        }
-        return outrasCidades;
+        return (this.grafo.keySet());        
     }
     
     public void limpaTodosCaminhos() {

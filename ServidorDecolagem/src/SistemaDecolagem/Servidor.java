@@ -186,8 +186,15 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
         return (this.grafo.getTodosCaminhos().toString());
     }
 
-    public String todasCidades() throws RemoteException {
-        return (this.grafo.getTodasCidades().toString());
+    public String cidadesPossiveis() throws RemoteException {
+        Set<String> cidades = this.grafo.getTodasCidades();
+        Set<String> outrasCidades = comunicacao.getCidades();
+        System.out.println(outrasCidades + "outros grafos");
+        
+        if (cidades != null) {
+            outrasCidades.addAll(cidades);   //Cria lista geral de vizinhos
+        }
+        return (outrasCidades.toString());
     }
     
     /** Método que carrega os dados dos clientes para o sistema.

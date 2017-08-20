@@ -140,7 +140,7 @@ public class TrataCliente implements Runnable {
     }
     
     private String cidades() throws RemoteException {
-        return (this.servidor.todasCidades());
+        return (this.servidor.cidadesPossiveis());
     }
     
 }
