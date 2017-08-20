@@ -18,7 +18,7 @@ import java.util.TreeSet;
  */
 public class Grafo {
     
-    private HashMap<String,ArrayList<String>> grafo;   //Lista de adjacência
+    private HashMap<String,ArrayList<Trecho>> grafo;   //Lista de adjacência
     private Stack<String> caminhoAtual;   //Pilha de caminho atual
     private TreeSet<String> visitadas;   //Conjunto de cidades visitadas no caminho
     private ArrayList<ArrayList<String>> todosCaminhos = new  ArrayList<>();
@@ -40,6 +40,19 @@ public class Grafo {
         return this.todosCaminhos;
     }
     
+    public Set<String> getTodasCidades() throws RemoteException {
+        System.out.println("todos as cidades grafo");
+        System.out.println(this.grafo.keySet() + "no grafo");
+        Set<String> cidades = this.grafo.keySet();
+        Set<String> outrasCidades = comunicacao.getCidades();
+        System.out.println(outrasCidades + "outros grafos");
+        
+        if (cidades != null) {
+            outrasCidades.addAll(cidades);   //Cria lista geral de vizinhos
+        }
+        return outrasCidades;
+    }
+    
     public void limpaTodosCaminhos() {
         this.todosCaminhos.clear();
     }
@@ -50,7 +63,7 @@ public class Grafo {
      * 
      * @return ArrayList
      */
-    public ArrayList<String> getVizinhos(String origem){
+    public ArrayList<Trecho> getVizinhos(String origem){
         return (this.grafo.get(origem));
     }
     
@@ -59,12 +72,12 @@ public class Grafo {
      * @param origem
      * @param destino
      */
-    public void addCaminho(String origem, String destino) {
+    public void addCaminho(String origem, Trecho destino) {
         
         if (this.grafo.containsKey(origem)) {
             this.grafo.get(origem).add(destino);
         } else {
-            ArrayList<String> vizinhos = new ArrayList<>();
+            ArrayList<Trecho> vizinhos = new ArrayList<>();
             vizinhos.add(destino);
             this.grafo.put(origem, vizinhos);
         }        
@@ -96,19 +109,19 @@ public class Grafo {
         } else {   //Se não:
             
             //Pega vizinhos de tal origem no próprio servidor:
-            ArrayList<String> vizinhos = this.getVizinhos(origem);
+            ArrayList<Trecho> vizinhos = this.getVizinhos(origem);
             //Pega vizinhos de tal origem nos outros servidores:
-            ArrayList<String> outrosVizinhos = comunicacao.getVizinhos(origem);
+            ArrayList<Trecho> outrosVizinhos = comunicacao.getVizinhos(origem);
             
             if (vizinhos != null) {
                 outrosVizinhos.addAll(vizinhos);   //Cria lista geral de vizinhos
             }
             
-            for (String vizinho : outrosVizinhos) {   //Percorre a lista de vizinhos totais
+            for (Trecho vizinho : outrosVizinhos) {   //Percorre a lista de vizinhos totais
                 
-                if (!this.visitadas.contains(vizinho)){   //Se cidade vizinha ainda não foi visitada:
+                if (!this.visitadas.contains(vizinho.getCidade())){   //Se cidade vizinha ainda não foi visitada:
                     //Método recursivo que estabelece caminhos possíveis a partir dela:
-                    this.caminhosPossiveis(vizinho, destino);
+                    this.caminhosPossiveis(vizinho.getCidade(), destino);
                 }
             }
         }

@@ -41,6 +41,12 @@ public class TelaInicialController implements Initializable {
     private TextField fieldDestino;
     @FXML
     private TextArea areaCaminhos;
+    @FXML
+    private Text textRotas;
+    @FXML
+    private ComboBox<String> comboOrigem;
+    @FXML
+    private Text textTrechos;
     private static Conexao conexao = Conexao.getInstancia();
     String recebe;
     
@@ -87,6 +93,11 @@ public class TelaInicialController implements Initializable {
         this.listRotas.getItems().addAll(caminhos);
     }
     
+    @FXML
+    void clicaOrigem(ActionEvent event) {
+        
+    }
+    
     /** Método que prepara a janela.
      * 
      * @param url
@@ -95,6 +106,19 @@ public class TelaInicialController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
         this.textNome.setText("Bem-vindo(a)!");
+        
+        if (conexao.conecta()) {
+            conexao.envia("cidades");
+            this.recebe = conexao.recebe().replace("[", "").replace("]", "").replace(" ", "");
+            System.out.println("Cidades: " + recebe);
+            this.comboOrigem.getItems().addAll(recebe.split(","));
+            
+            try {       
+                conexao.desconecta();
+            } catch (IOException ex) {
+                Logger.getLogger(TelaInicialController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
 }

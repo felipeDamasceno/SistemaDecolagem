@@ -59,6 +59,11 @@ public class TrataCliente implements Runnable {
                     String caminhos = this.caminhos();
                     this.saida.println(caminhos);
                     break;
+                case "cidades":
+                    System.out.println("case cidades");
+                    String cidades = this.cidades();
+                    this.saida.println(cidades);
+                    break;
                 case "fechar":
                     this.servidor.fechar();
                     break;                
@@ -132,6 +137,10 @@ public class TrataCliente implements Runnable {
         String destino = this.entrada.nextLine();  
         this.servidor.limpaCaminhos();
         return (this.servidor.caminhosPossiveis(origem, destino));
+    }
+    
+    private String cidades() throws RemoteException {
+        return (this.servidor.todasCidades());
     }
     
 }
