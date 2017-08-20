@@ -114,11 +114,11 @@ public class ComunicacaoServidor {
         return vizinhos;
     }
     
-    public Set<String> getCidades() throws RemoteException{
-        Set<String> cidades = new HashSet<>();
+    public HashSet<String> getCidades() throws RemoteException{
+        HashSet<String> cidades = new HashSet<>();
         
         for (InterfaceComunicacao servidor: this.servidores){
-            Set<String> c = servidor.getCidades();
+            HashSet<String> c = servidor.getCidades();
             
             if (c != null){
                 cidades.addAll(c);

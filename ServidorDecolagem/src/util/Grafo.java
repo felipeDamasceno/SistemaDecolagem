@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
@@ -40,10 +41,13 @@ public class Grafo {
         return this.todosCaminhos;
     }
     
-    public Set<String> getTodasCidades() throws RemoteException {
-        System.out.println("todos as cidades grafo");
-        System.out.println(this.grafo.keySet() + "no grafo");
-        return (this.grafo.keySet());        
+    public HashSet<String> getTodasCidades() throws RemoteException {
+        HashSet<String> todasCidades = new HashSet<>();
+        
+        this.grafo.keySet().forEach((cidade) -> {
+            todasCidades.add(cidade);
+        });
+        return todasCidades;        
     }
     
     public void limpaTodosCaminhos() {

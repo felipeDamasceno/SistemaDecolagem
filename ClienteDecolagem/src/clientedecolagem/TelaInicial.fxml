@@ -18,8 +18,9 @@
             <TextField fx:id="fieldDestino" layoutX="28.0" layoutY="188.0" prefHeight="25.0" prefWidth="116.0" />
             <Button fx:id="buttonComprar" layoutX="602.0" layoutY="248.0" mnemonicParsing="false" text="Comprar" />
             <Text fx:id="textRotas" layoutX="335.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rotas:" />
-            <ComboBox fx:id="comboOrigem" layoutX="549.0" layoutY="103.0" onAction="#clicaOrigem" prefHeight="25.0" prefWidth="116.0" />
+            <ComboBox fx:id="comboInicio" layoutX="549.0" layoutY="103.0" onAction="#clicaOrigem" prefHeight="25.0" prefWidth="116.0" />
             <Text fx:id="textTrecho" layoutX="549.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Trecho:" />
+            <ComboBox fx:id="comboFim" layoutX="549.0" layoutY="188.0" prefHeight="25.0" prefWidth="116.0" />
          </children>
       </AnchorPane>
    </content>

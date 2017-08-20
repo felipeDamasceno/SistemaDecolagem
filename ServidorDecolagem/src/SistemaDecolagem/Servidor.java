@@ -19,7 +19,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -39,7 +41,6 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
     private transient Grafo grafo;
     private transient ServerSocket serverSocket;
     private HashMap<String, String> clientes;// <nome, senha>
-    private static ComunicacaoServidor comunicacao = ComunicacaoServidor.getInstance();
 
     protected Servidor() throws RemoteException {
         super();
@@ -125,7 +126,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
     }  
     
     @Override
-    public Set<String> getCidades() throws RemoteException {
+    public HashSet<String> getCidades() throws RemoteException {
         return (this.grafo.getTodasCidades());
     }
     
@@ -186,15 +187,35 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
         return (this.grafo.getTodosCaminhos().toString());
     }
 
-    public String cidadesPossiveis() throws RemoteException {
-        Set<String> cidades = this.grafo.getTodasCidades();
-        Set<String> outrasCidades = comunicacao.getCidades();
-        System.out.println(outrasCidades + "outros grafos");
+    public String cidadesPossiveis() throws RemoteException, NotBoundException, MalformedURLException {
+        ComunicacaoServidor comunicacao = ComunicacaoServidor.getInstance();
+        comunicacao.conectar();
+        comunicacao.hello();   //Teste de comunicação
+        HashSet<String> cidades = this.grafo.getTodasCidades();
+        HashSet<String> outrasCidades = comunicacao.getCidades();
         
         if (cidades != null) {
             outrasCidades.addAll(cidades);   //Cria lista geral de vizinhos
         }
         return (outrasCidades.toString());
+    }
+    
+    public String trechosPossiveis(String inicio) throws RemoteException, NotBoundException, MalformedURLException {
+        ComunicacaoServidor comunicacao = ComunicacaoServidor.getInstance();
+        comunicacao.conectar();
+        comunicacao.hello();   //Teste de comunicação
+        ArrayList<Trecho> vizinhos = this.grafo.getVizinhos(inicio);
+        ArrayList<Trecho> outrosVizinhos = comunicacao.getVizinhos(inicio);
+
+        if (vizinhos != null) {
+            outrosVizinhos.addAll(vizinhos);   //Cria lista geral de vizinhos
+        }
+        String string[] = new String[outrosVizinhos.size()];
+        
+        for (int i = 0; i < outrosVizinhos.size(); i++) {
+            string[i] = outrosVizinhos.get(i).getCidade() + "-" + "Servidor" + outrosVizinhos.get(i).getServidor() + "@";
+        }
+        return (Arrays.toString(string));
     }
     
     /** Método que carrega os dados dos clientes para o sistema.

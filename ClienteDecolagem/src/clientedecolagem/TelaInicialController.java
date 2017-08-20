@@ -44,9 +44,11 @@ public class TelaInicialController implements Initializable {
     @FXML
     private Text textRotas;
     @FXML
-    private ComboBox<String> comboOrigem;
+    private ComboBox<String> comboInicio;
     @FXML
     private Text textTrechos;
+    @FXML
+    private ComboBox<String> comboFim;
     private static Conexao conexao = Conexao.getInstancia();
     String recebe;
     
@@ -96,6 +98,23 @@ public class TelaInicialController implements Initializable {
     @FXML
     void clicaOrigem(ActionEvent event) {
         
+        if (this.comboInicio.isFocusTraversable()) {
+            this.comboFim.getItems().clear();
+            
+            if (conexao.conecta()) {
+                conexao.envia("trechos");
+                conexao.envia(this.comboInicio.getValue());
+                this.recebe = conexao.recebe().replace(",", "").replace("[", "").replace("]", "").replace(" ", "");
+                System.out.println(this.recebe);
+                this.comboFim.getItems().addAll(recebe.split("@"));
+            }
+            
+            try {       
+                conexao.desconecta();
+            } catch (IOException ex) {
+                Logger.getLogger(TelaInicialController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     /** Método que prepara a janela.
@@ -111,7 +130,7 @@ public class TelaInicialController implements Initializable {
             conexao.envia("cidades");
             this.recebe = conexao.recebe().replace("[", "").replace("]", "").replace(" ", "");
             System.out.println("Cidades: " + recebe);
-            this.comboOrigem.getItems().addAll(recebe.split(","));
+            this.comboInicio.getItems().addAll(recebe.split(","));
             
             try {       
                 conexao.desconecta();
