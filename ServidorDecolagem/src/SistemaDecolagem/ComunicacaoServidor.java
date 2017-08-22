@@ -7,7 +7,10 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
+import util.Trecho;
 
 
 /**
@@ -98,11 +101,11 @@ public class ComunicacaoServidor {
      * 
      * @throws RemoteException 
      */
-    public ArrayList<String> getVizinhos(String origem) throws RemoteException{
-        ArrayList<String> vizinhos = new ArrayList<>();
+    public ArrayList<Trecho> getVizinhos(String origem) throws RemoteException{
+        ArrayList<Trecho> vizinhos = new ArrayList<>();
         
-        for (InterfaceComunicacao servidor: servidores){
-            ArrayList<String> v = servidor.getVizinhos(origem);
+        for (InterfaceComunicacao servidor: this.servidores){
+            ArrayList<Trecho> v = servidor.getVizinhos(origem);
             
             if (v != null){
                 vizinhos.addAll(v);
@@ -111,10 +114,23 @@ public class ComunicacaoServidor {
         return vizinhos;
     }
     
+    public Set<String> getCidades() throws RemoteException{
+        Set<String> cidades = new HashSet<>();
+        
+        for (InterfaceComunicacao servidor: this.servidores){
+            Set<String> c = servidor.getCidades();
+            
+            if (c != null){
+                cidades.addAll(c);
+            }              
+        }        
+        return cidades;
+    }
+    
     //Teste de comunicação.
     public void hello() throws RemoteException{
        
-        for (InterfaceComunicacao servidor: servidores){
+        for (InterfaceComunicacao servidor: this.servidores){
             System.out.println(servidor.hello());
         }        
     }

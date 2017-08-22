@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -17,6 +18,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 
@@ -24,8 +27,6 @@ public class TelaInicialController implements Initializable {
 
     @FXML
     private Text textDestino;
-    @FXML
-    private ComboBox<String> comboDestino;
     @FXML
     private Text textOrigem;
     @FXML
@@ -35,25 +36,19 @@ public class TelaInicialController implements Initializable {
     @FXML
     private Text textNome;
     @FXML
-    private ComboBox<String> comboOrigem;
-    private static Conexao conexao = Conexao.getInstancia();
-    
+    private TextField fieldOrigem;
     @FXML
-    public void getCidades(ActionEvent event) {
-        
-        if (conexao.conecta()) {
-            conexao.envia("cidades");
-            String cidade[] = (conexao.recebe().replace("[", "").replace("]", "").replace(",", "")).split(" ");               
-            System.out.println(Arrays.toString(cidade));
-            this.comboOrigem.getItems().addAll(Arrays.asList(cidade));
-            
-            try {       
-                conexao.desconecta();
-            } catch (IOException ex) {
-                Logger.getLogger(TelaInicialController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
+    private TextField fieldDestino;
+    @FXML
+    private TextArea areaCaminhos;
+    @FXML
+    private Text textRotas;
+    @FXML
+    private ComboBox<String> comboOrigem;
+    @FXML
+    private Text textTrechos;
+    private static Conexao conexao = Conexao.getInstancia();
+    String recebe;
     
     /** Método que libera o evento para pesquisa de caminhos possíveis a partir da
      * origem e destino especificados.
@@ -64,15 +59,43 @@ public class TelaInicialController implements Initializable {
      */
     @FXML
     public void clicaOk(ActionEvent event) throws IOException {
-        String origem = (this.textOrigem.getText());
-        String destino = (this.textDestino.getText());
+        String origem = (this.fieldOrigem.getText());
+        String destino = (this.fieldDestino.getText());
+        System.out.println("evento ok");
         
         if (conexao.conecta()) {
             conexao.envia("caminhos");
             conexao.envia(origem);
             conexao.envia(destino);
+            this.recebe = conexao.recebe().replace(",", "").replace("[", "").replace("]", "").replace(" ", "");
+            System.out.println("Caminhos: " + recebe);
             conexao.desconecta();       
         }
+        char[] caractere = this.recebe.toCharArray();
+        int i = 0;
+        ArrayList<String> caminho = new ArrayList<>();
+        ArrayList<ArrayList<String>> caminhos = new ArrayList<>();
+        
+        while (i < caractere.length) {
+            System.out.println(caractere[i]);
+            if (caractere[i] != '@') {
+                System.out.println(String.valueOf(caractere[i]));
+                caminho.add(String.valueOf(caractere[i]));
+            } else {
+                System.out.println(String.valueOf(caminho));
+                caminhos.add((ArrayList<String>) caminho.clone());
+                System.out.println(caminhos);
+                caminho.clear();
+            }
+            i++;
+        }        
+        this.listRotas.getItems().clear();
+        this.listRotas.getItems().addAll(caminhos);
+    }
+    
+    @FXML
+    void clicaOrigem(ActionEvent event) {
+        
     }
     
     /** Método que prepara a janela.
@@ -83,6 +106,19 @@ public class TelaInicialController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
         this.textNome.setText("Bem-vindo(a)!");
+        
+        if (conexao.conecta()) {
+            conexao.envia("cidades");
+            this.recebe = conexao.recebe().replace("[", "").replace("]", "").replace(" ", "");
+            System.out.println("Cidades: " + recebe);
+            this.comboOrigem.getItems().addAll(recebe.split(","));
+            
+            try {       
+                conexao.desconecta();
+            } catch (IOException ex) {
+                Logger.getLogger(TelaInicialController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
 }

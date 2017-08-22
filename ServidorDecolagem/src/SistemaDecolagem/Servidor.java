@@ -26,6 +26,7 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import util.Grafo;
+import util.Trecho;
 
 
 /** Classe Servidor, responsável por atender as solicitações dos clientes e conectar
@@ -38,6 +39,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
     private transient Grafo grafo;
     private transient ServerSocket serverSocket;
     private HashMap<String, String> clientes;// <nome, senha>
+    private static ComunicacaoServidor comunicacao = ComunicacaoServidor.getInstance();
 
     protected Servidor() throws RemoteException {
         super();
@@ -64,10 +66,6 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
         }
     }
     
-    public String getCidades() {
-        return (this.grafo.getCidades());
-    }
-    
     /** Método que retorna os clientes.
      *
      * @return clientes
@@ -76,8 +74,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
         return (this.clientes);
     }
 
-    /**
-     * Muda o valor dos clientes
+    /** Método que altera os clientes.
      *
      * @param clientes
      */
@@ -123,9 +120,14 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
      * @throws RemoteException 
      */
     @Override
-    public ArrayList<String> getVizinhos(String origem) throws RemoteException {
+    public ArrayList<Trecho> getVizinhos(String origem) throws RemoteException {
         return (this.grafo.getVizinhos(origem));
-    }   
+    }  
+    
+    @Override
+    public Set<String> getCidades() throws RemoteException {
+        return (this.grafo.getTodasCidades());
+    }
     
     /** Método que abre uma porta do servidor e permite que mais de um cliente a acesse.
      * @throws java.io.IOException
@@ -163,6 +165,10 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
         System.exit(0);
     }
 
+    public void limpaCaminhos() {
+        this.grafo.limpaTodosCaminhos();
+    }
+    
     /** Método que verifica todos os caminhos da origem ao destino especificados.
      * 
      * @param origem
@@ -172,13 +178,18 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
      * @throws NotBoundException
      * @throws MalformedURLException 
      */
-    public void caminhosPossiveis(String origem, String destino) throws RemoteException, NotBoundException, MalformedURLException {
+    public String caminhosPossiveis(String origem, String destino) throws RemoteException, NotBoundException, MalformedURLException {
         ComunicacaoServidor comunicacao = ComunicacaoServidor.getInstance();
         comunicacao.conectar();
         comunicacao.hello();   //Teste de comunicação
         this.grafo.caminhosPossiveis(origem, destino);
+        return (this.grafo.getTodosCaminhos().toString());
     }
 
+    public String todasCidades() throws RemoteException {
+        return (this.grafo.getTodasCidades().toString());
+    }
+    
     /** Método que carrega os dados dos clientes para o sistema.
      * 
      * @throws IOException
@@ -205,7 +216,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
         
         while (scan.hasNext()) {
             info = (scan.nextLine()).split("-");   //Formato: origem - destino - número de passagens
-            this.grafo.addCaminho(info[0].trim(), info[1].trim());   //Adiciona ao grafo            
+            this.grafo.addCaminho(info[0].trim(), new Trecho(info[1].trim(), ComunicacaoServidor.getNome(), Integer.parseInt(info[2].trim())));   //Adiciona ao grafo            
         }
     }
 
