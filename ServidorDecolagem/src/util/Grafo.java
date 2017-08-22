@@ -64,6 +64,28 @@ public class Grafo {
         return (this.grafo.get(origem));
     }
     
+    public String diminuiAssento(String inicio, String fim) {
+        ArrayList<Trecho> trechos = this.grafo.get(inicio);
+        
+        if (trechos != null) {
+                
+            for (Trecho trecho : trechos) {
+
+                if (trecho.getCidade().equals(fim)) {
+
+                    if (trecho.getAssentos() > 0) {
+                        trecho.diminuiAssento();
+                        System.out.println("compra realizada");
+                        System.out.println(trecho.getAssentos());
+                        return "1";
+                    }
+                }
+            }
+        }
+        System.out.println("compra não realizada");
+        return "0";
+    }
+    
     /** Método que recebe as cidades de origem e destino, e cria um trecho entre elas.
      *
      * @param origem

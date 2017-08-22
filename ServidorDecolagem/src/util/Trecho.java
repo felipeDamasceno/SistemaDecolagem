@@ -43,4 +43,8 @@ public class Trecho implements Serializable {
         this.assentos = assentos;
     }
     
+    public void diminuiAssento() {
+        this.assentos -= 1;
+    }
+    
 }

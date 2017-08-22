@@ -64,6 +64,12 @@ public class TrataCliente implements Runnable {
                 case "trechos":
                     this.saida.println(this.trechos());
                     break;
+                case "compra":
+                    this.saida.println(this.compra());
+                    break;
+                case "reserva":
+                    this.saida.println(this.reserva());
+                    break;
                 case "fechar":
                     this.servidor.fechar();
                     break;                
@@ -146,6 +152,19 @@ public class TrataCliente implements Runnable {
     private String trechos() throws RemoteException, NotBoundException, MalformedURLException {
         String inicio = this.entrada.nextLine();
         return (this.servidor.trechosPossiveis(inicio));
+    }
+    
+    private String compra() throws NotBoundException, RemoteException, MalformedURLException {
+        String cliente = this.entrada.nextLine();
+        String inicio = this.entrada.nextLine();
+        String fim = this.entrada.nextLine();
+        String server = this.entrada.nextLine();
+        return (this.servidor.compra(cliente, inicio, fim, server));
+    }
+
+    private String reserva() {
+        String cliente = this.entrada.nextLine();
+        return (this.servidor.retornaReserva(cliente));
     }
     
 }

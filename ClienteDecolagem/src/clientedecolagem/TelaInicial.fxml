@@ -16,11 +16,13 @@
             <ListView fx:id="listRotas" layoutX="235.0" layoutY="54.0" prefHeight="258.0" prefWidth="232.0" />
             <TextField fx:id="fieldOrigem" layoutX="28.0" layoutY="103.0" prefHeight="25.0" prefWidth="116.0" />
             <TextField fx:id="fieldDestino" layoutX="28.0" layoutY="188.0" prefHeight="25.0" prefWidth="116.0" />
-            <Button fx:id="buttonComprar" layoutX="602.0" layoutY="248.0" mnemonicParsing="false" text="Comprar" />
+            <Button fx:id="buttonComprar" layoutX="602.0" layoutY="248.0" mnemonicParsing="false" onAction="#clicaComprar" text="Comprar" />
             <Text fx:id="textRotas" layoutX="335.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rotas:" />
             <ComboBox fx:id="comboInicio" layoutX="549.0" layoutY="103.0" onAction="#clicaOrigem" prefHeight="25.0" prefWidth="116.0" />
-            <Text fx:id="textTrecho" layoutX="549.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Trecho:" />
+            <Text fx:id="textTrecho" layoutX="482.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Trecho:" />
             <ComboBox fx:id="comboFim" layoutX="549.0" layoutY="188.0" prefHeight="25.0" prefWidth="116.0" />
+            <Text fx:id="textInicio" layoutX="549.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Início:" />
+            <Text fx:id="textFim" layoutX="549.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fim:" />
          </children>
       </AnchorPane>
    </content>

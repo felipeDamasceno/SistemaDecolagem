@@ -40,12 +40,14 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
 
     private transient Grafo grafo;
     private transient ServerSocket serverSocket;
-    private HashMap<String, String> clientes;// <nome, senha>
+    private HashMap<String, String> clientes;   // <nome, senha>
+    private HashMap<String, ArrayList<String>> compras;   // <nome, trechos>
 
     protected Servidor() throws RemoteException {
         super();
         this.grafo = new Grafo();
         this.clientes = new HashMap<>();
+        this.compras = new HashMap<>();
         
         try {
             switch (ComunicacaoServidor.getNome()) {
@@ -110,6 +112,69 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
      */
     public String getSenha(String nome) {
         return (this.clientes.get(nome));
+    }
+    
+    /** Método que retorna as compras.
+     *
+     * @return clientes
+     */
+    public HashMap<String, ArrayList<String>> getCompras() {
+        return (this.compras);
+    }
+
+    /** Método que altera as comrpas.
+     *
+     * @param compras
+     */
+    public void setCompras(HashMap<String, ArrayList<String>> compras) {
+        this.compras = compras;
+    }
+    
+    /** Método que adiciona uma trecho.
+     *
+     * @param nome
+     * @param inicio
+     * @param fim
+     */
+    @Override
+    public void addCompra(String nome, String inicio, String fim) {
+        
+        if (this.contemCompra(nome) == false) {
+            ArrayList<String> array = new ArrayList<>();
+            array.add(inicio);
+            array.add(fim);
+            this.compras.put(nome, array);
+            System.out.println("novo trecho" + nome);
+            System.out.println(inicio + fim);
+        } else {
+            
+            if (!this.getTrechos(nome).contains(fim)) {
+                this.getTrechos(nome).add(fim);
+            }            
+            System.out.println("trecho existente" + nome);
+            System.out.println(fim);
+        }
+        System.out.println(this.getTrechos(nome));
+    }
+    
+    /** Método que verfica se cliente já está cadastrado.
+     *
+     * @param nome
+     * 
+     * @return boolean (true or false)
+     */
+    public boolean contemCompra(String nome) {
+        return (this.compras.containsKey(nome));
+    }
+    
+    /** Método que retorna as compras de um cliente.
+     *
+     * @param nome
+     * 
+     * @return cliente
+     */
+    public ArrayList<String> getTrechos(String nome) {
+        return (this.compras.get(nome));
     }
     
     /** Método remoto que retorna uma lista de cidades vizinhas de uma dada origem.
@@ -218,6 +283,36 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
         return (Arrays.toString(string));
     }
     
+    public String compra(String cliente, String inicio, String fim, String server) throws NotBoundException, RemoteException, MalformedURLException {        
+        ComunicacaoServidor comunicacao = ComunicacaoServidor.getInstance();
+        comunicacao.conectar();
+        comunicacao.hello();   //Teste de comunicação
+        
+        if (ComunicacaoServidor.getNome().equals(server)) {
+            System.out.println("compra no mesmo servidor");
+            if (this.compraPassagem(inicio, fim).equals("1")) {
+                this.addCompra(cliente, inicio, fim);
+                comunicacao.addCompra(cliente, inicio, fim);
+                return "1";
+            }
+            return "0";
+        } else {
+            System.out.println("compra em outro servidor");
+            if (comunicacao.compraPassagem(inicio, fim).equals("1")) {
+                comunicacao.addCompra(cliente, inicio, fim);
+                this.addCompra(cliente, inicio, fim);
+                return "1";
+            }
+            return "0";
+        }        
+        
+    }
+    
+    @Override
+    public String compraPassagem(String inicio, String fim) {
+        return (this.grafo.diminuiAssento(inicio, fim));
+    }
+    
     /** Método que carrega os dados dos clientes para o sistema.
      * 
      * @throws IOException
@@ -228,7 +323,8 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
         
         if (file.exists()) {
             Servidor servidor = (Servidor) (new ObjectInputStream(new FileInputStream(file))).readObject();
-            setClientes(servidor.getClientes());
+            this.setClientes(servidor.getClientes());
+            this.setCompras(servidor.getCompras());
         }
     }
     
@@ -276,6 +372,22 @@ public class Servidor extends UnicastRemoteObject implements InterfaceComunicaca
     @Override
     public String hello() {
         return ("Hello");
+    }
+
+    public String retornaReserva(String cliente) {
+        String retorna = new String();
+        ArrayList<String> array = this.getTrechos(cliente);
+        
+        if (array != null) {
+            
+            for (String trecho : array) {
+                retorna += trecho + "->";
+            }
+            return retorna.substring(0, retorna.length() - 2);
+        } else {
+            return "";
+        }
+        
     }
     
 }

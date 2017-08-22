@@ -134,5 +134,20 @@ public class ComunicacaoServidor {
             System.out.println(servidor.hello());
         }        
     }
+
+    public void addCompra(String nomeCliente, String inicio, String fim) throws RemoteException {
+        
+        for (InterfaceComunicacao servidor: this.servidores) {
+            servidor.addCompra(nomeCliente, inicio, fim);            
+        }
+    }
+
+    public String compraPassagem(String inicio, String fim) throws RemoteException {
+        
+        for (InterfaceComunicacao servidor: this.servidores) {
+            return (servidor.compraPassagem(inicio, fim));                       
+        }
+        return "0";
+    }
     
 }
