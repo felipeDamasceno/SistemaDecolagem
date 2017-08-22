@@ -114,11 +114,11 @@ public class ComunicacaoServidor {
         return vizinhos;
     }
     
-    public Set<String> getCidades() throws RemoteException{
-        Set<String> cidades = new HashSet<>();
+    public HashSet<String> getCidades() throws RemoteException{
+        HashSet<String> cidades = new HashSet<>();
         
         for (InterfaceComunicacao servidor: this.servidores){
-            Set<String> c = servidor.getCidades();
+            HashSet<String> c = servidor.getCidades();
             
             if (c != null){
                 cidades.addAll(c);
@@ -127,12 +127,20 @@ public class ComunicacaoServidor {
         return cidades;
     }
     
-    //Teste de comunicação.
-    public void hello() throws RemoteException{
-       
-        for (InterfaceComunicacao servidor: this.servidores){
-            System.out.println(servidor.hello());
-        }        
+
+    public void addCompra(String nomeCliente, String inicio, String fim) throws RemoteException {
+        
+        for (InterfaceComunicacao servidor: this.servidores) {
+            servidor.addCompra(nomeCliente, inicio, fim);            
+        }
+    }
+
+    public String compraPassagem(String inicio, String fim) throws RemoteException {
+        
+        for (InterfaceComunicacao servidor: this.servidores) {
+            return (servidor.compraPassagem(inicio, fim));                       
+        }
+        return "0";
     }
     
 }

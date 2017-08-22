@@ -56,13 +56,19 @@ public class TrataCliente implements Runnable {
                     break;
                 case "caminhos":
                     System.out.println("case caminhos");
-                    String caminhos = this.caminhos();
-                    this.saida.println(caminhos);
+                    this.saida.println(this.caminhos());
                     break;
                 case "cidades":
-                    System.out.println("case cidades");
-                    String cidades = this.cidades();
-                    this.saida.println(cidades);
+                    this.saida.println(this.cidades());
+                    break;
+                case "trechos":
+                    this.saida.println(this.trechos());
+                    break;
+                case "compra":
+                    this.saida.println(this.compra());
+                    break;
+                case "reserva":
+                    this.saida.println(this.reserva());
                     break;
                 case "fechar":
                     this.servidor.fechar();
@@ -139,8 +145,26 @@ public class TrataCliente implements Runnable {
         return (this.servidor.caminhosPossiveis(origem, destino));
     }
     
-    private String cidades() throws RemoteException {
-        return (this.servidor.todasCidades());
+    private String cidades() throws RemoteException, NotBoundException, MalformedURLException {
+        return (this.servidor.cidadesPossiveis());
+    }
+    
+    private String trechos() throws RemoteException, NotBoundException, MalformedURLException {
+        String inicio = this.entrada.nextLine();
+        return (this.servidor.trechosPossiveis(inicio));
+    }
+    
+    private String compra() throws NotBoundException, RemoteException, MalformedURLException {
+        String cliente = this.entrada.nextLine();
+        String inicio = this.entrada.nextLine();
+        String fim = this.entrada.nextLine();
+        String server = this.entrada.nextLine();
+        return (this.servidor.compra(cliente, inicio, fim, server));
+    }
+
+    private String reserva() {
+        String cliente = this.entrada.nextLine();
+        return (this.servidor.retornaReserva(cliente));
     }
     
 }

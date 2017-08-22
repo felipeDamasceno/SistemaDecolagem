@@ -21,6 +21,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javax.swing.JOptionPane;
 
 
 public class TelaInicialController implements Initializable {
@@ -44,9 +45,15 @@ public class TelaInicialController implements Initializable {
     @FXML
     private Text textRotas;
     @FXML
-    private ComboBox<String> comboOrigem;
+    private ComboBox<String> comboInicio;
     @FXML
-    private Text textTrechos;
+    private Text textTrecho;
+    @FXML
+    private ComboBox<String> comboFim;
+    @FXML
+    private Text textInicio;
+    @FXML
+    private Text textFim;
     private static Conexao conexao = Conexao.getInstancia();
     String recebe;
     
@@ -96,6 +103,62 @@ public class TelaInicialController implements Initializable {
     @FXML
     void clicaOrigem(ActionEvent event) {
         
+        if (this.comboInicio.isFocusTraversable()) {
+            this.comboFim.getItems().clear();
+            
+            if (conexao.conecta()) {
+                conexao.envia("trechos");
+                conexao.envia(this.comboInicio.getValue());
+                this.recebe = conexao.recebe().replace(",", "").replace("[", "").replace("]", "").replace(" ", "");
+                System.out.println(this.recebe);
+                this.comboFim.getItems().addAll(recebe.split("@"));
+            }
+            
+            try {       
+                conexao.desconecta();
+            } catch (IOException ex) {
+                Logger.getLogger(TelaInicialController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    @FXML
+    public void clicaComprar(ActionEvent event) throws IOException {
+        String inicio = this.comboInicio.getValue();
+        String comboF = this.comboFim.getValue();
+        String fim = String.valueOf(comboF.charAt(0));
+        String servidor = String.valueOf(comboF.charAt(comboF.length() - 1));
+                
+        if (conexao.conecta()) {
+            conexao.envia("compra");
+            System.out.println(Conexao.getCliente());
+            conexao.envia(Conexao.getCliente());
+            System.out.println(inicio);
+            conexao.envia(inicio);
+            System.out.println(fim);
+            conexao.envia(fim);
+            System.out.println(servidor);
+            conexao.envia(servidor);
+            this.recebe = conexao.recebe();
+            System.out.println(this.recebe);
+            
+            if (this.recebe.equals("1")) {
+                this.textTrecho.setText(this.textTrecho.getText().substring(0, this.textTrecho.getText().length() - 1));
+                this.textTrecho.setText(this.textTrecho.getText() + inicio + "->" + fim);
+                this.comboInicio.getItems().clear();
+                this.comboInicio.getItems().add(fim);
+                this.comboFim.getItems().clear();
+                JOptionPane.showMessageDialog(null, "Compra realizada!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Compra indisponível!", "Erro!", JOptionPane.ERROR_MESSAGE);
+            }
+            
+            try {       
+                conexao.desconecta();
+            } catch (IOException ex) {
+                Logger.getLogger(TelaInicialController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     /** Método que prepara a janela.
@@ -105,19 +168,39 @@ public class TelaInicialController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
-        this.textNome.setText("Bem-vindo(a)!");
+        this.textNome.setText("Bem-vindo(a), " + Conexao.getCliente() + "!");
+        this.textTrecho.setText("Trecho:  ");
         
         if (conexao.conecta()) {
-            conexao.envia("cidades");
-            this.recebe = conexao.recebe().replace("[", "").replace("]", "").replace(" ", "");
-            System.out.println("Cidades: " + recebe);
-            this.comboOrigem.getItems().addAll(recebe.split(","));
+            conexao.envia("reserva");
+            conexao.envia(Conexao.getCliente());
+            this.recebe = conexao.recebe();
+            System.out.println("Reserva: " + this.recebe);
+            this.textTrecho.setText(this.textTrecho.getText() + this.recebe);
+        }  
+        
+        try {       
+            conexao.desconecta();
+        } catch (IOException ex) {
+            Logger.getLogger(TelaInicialController.class.getName()).log(Level.SEVERE, null, ex);
+        }
             
-            try {       
-                conexao.desconecta();
-            } catch (IOException ex) {
-                Logger.getLogger(TelaInicialController.class.getName()).log(Level.SEVERE, null, ex);
+        if (conexao.conecta()) {
+
+            if (this.recebe.equals("")) {
+                conexao.envia("cidades");
+                this.recebe = conexao.recebe().replace("[", "").replace("]", "").replace(" ", "");
+                System.out.println("Cidades: " + recebe);
+                this.comboInicio.getItems().addAll(recebe.split(","));
+            } else {
+                this.comboInicio.getItems().add(String.valueOf(this.textTrecho.getText().charAt(this.textTrecho.getText().length() - 1)));
             }
+        }
+            
+        try {       
+            conexao.desconecta();
+        } catch (IOException ex) {
+            Logger.getLogger(TelaInicialController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

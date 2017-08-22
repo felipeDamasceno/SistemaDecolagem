@@ -71,7 +71,8 @@ public class TelaLoginController implements Initializable {
                     String resposta = conexao.recebe();
                     conexao.desconecta();
 
-                    if (resposta.equals("1")) {                       
+                    if (resposta.equals("1")) {         
+                        Conexao.setCliente(nome);
                         new TelaInicial().start(new Stage());                        
                         TelaLogin.getStage().close();
                     } else {

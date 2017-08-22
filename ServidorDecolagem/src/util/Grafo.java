@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
@@ -40,17 +41,13 @@ public class Grafo {
         return this.todosCaminhos;
     }
     
-    public Set<String> getTodasCidades() throws RemoteException {
-        System.out.println("todos as cidades grafo");
-        System.out.println(this.grafo.keySet() + "no grafo");
-        Set<String> cidades = this.grafo.keySet();
-        Set<String> outrasCidades = comunicacao.getCidades();
-        System.out.println(outrasCidades + "outros grafos");
+    public HashSet<String> getTodasCidades() throws RemoteException {
+        HashSet<String> todasCidades = new HashSet<>();
         
-        if (cidades != null) {
-            outrasCidades.addAll(cidades);   //Cria lista geral de vizinhos
-        }
-        return outrasCidades;
+        this.grafo.keySet().forEach((cidade) -> {
+            todasCidades.add(cidade);
+        });
+        return todasCidades;        
     }
     
     public void limpaTodosCaminhos() {
@@ -65,6 +62,28 @@ public class Grafo {
      */
     public ArrayList<Trecho> getVizinhos(String origem){
         return (this.grafo.get(origem));
+    }
+    
+    public String diminuiAssento(String inicio, String fim) {
+        ArrayList<Trecho> trechos = this.grafo.get(inicio);
+        
+        if (trechos != null) {
+                
+            for (Trecho trecho : trechos) {
+
+                if (trecho.getCidade().equals(fim)) {
+
+                    if (trecho.getAssentos() > 0) {
+                        trecho.diminuiAssento();
+                        System.out.println("compra realizada");
+                        System.out.println(trecho.getAssentos());
+                        return "1";
+                    }
+                }
+            }
+        }
+        System.out.println("compra não realizada");
+        return "0";
     }
     
     /** Método que recebe as cidades de origem e destino, e cria um trecho entre elas.

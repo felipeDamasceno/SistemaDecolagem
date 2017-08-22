@@ -26,6 +26,7 @@ public class Conexao {
     private PrintStream saida;
     private static String ip;   //Ip do servidor	
     private static String nome;
+    private static String cliente;
 
     /** Método que inicializa a classe.
      * 
@@ -62,6 +63,14 @@ public class Conexao {
      */
     public static void setNome(String nome){
         Conexao.nome = nome;
+    }
+
+    public static String getCliente() {
+        return cliente;
+    }
+
+    public static void setCliente(String cliente) {
+        Conexao.cliente = cliente;
     }
         
     /** Método que conecta com o servidor.
